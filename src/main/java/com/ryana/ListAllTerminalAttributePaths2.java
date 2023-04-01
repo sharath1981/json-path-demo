@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -21,21 +22,16 @@ public class ListAllTerminalAttributePaths2 {
     final var jsonStr = new String(Files.readAllBytes(filePath));
     final var jsonObject = new JsonParser().parse(jsonStr).getAsJsonObject();
     final var jsonPaths = new LinkedHashMap<String, String>();
-    traverseJson(jsonObject, "", jsonPaths);
+    traverseJson(jsonObject, "$", jsonPaths);
     return jsonPaths;
   }
 
   private static void traverseJson(Object jsonValue, String path, Map<String, String> jsonPaths) {
     if (jsonValue instanceof JsonObject jsonObject) {
-      for (final var key : jsonObject.keySet()) {
-        final var currentPath = path + "/" + key;
-        traverseJson(jsonObject.get(key), currentPath, jsonPaths);
-      }
+      jsonObject.entrySet().forEach(entry -> traverseJson(entry.getValue(), path + "." + entry.getKey(), jsonPaths));
     } else if (jsonValue instanceof JsonArray jsonArray) {
-      for (int i = 0; i < jsonArray.size(); i++) {
-        final var currentPath = path + "[" + i + "]";
-        traverseJson(jsonArray.get(i), currentPath, jsonPaths);
-      }
+      IntStream.range(0, jsonArray.size())
+          .forEach(i -> traverseJson(jsonArray.get(i), path + "[" + i + "]", jsonPaths));
     } else {
       jsonPaths.put(path, String.valueOf(jsonValue));
     }
