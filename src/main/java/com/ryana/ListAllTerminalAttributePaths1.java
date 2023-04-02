@@ -19,14 +19,14 @@ public class ListAllTerminalAttributePaths1 {
   private static List<String> listTerminalAttributePaths(String jsonString) {
     final var jsonObject = new JSONObject(jsonString);
     final var paths = new ArrayList<String>();
-    traverseJson(jsonObject, "", paths);
+    traverseJson(jsonObject, "$", paths);
     return paths;
   }
 
   private static void traverseJson(Object jsonValue, String path, List<String> paths) {
     if (jsonValue instanceof JSONObject jsonObject) {
       for (final var key : jsonObject.keySet()) {
-        final var currentPath = path + "/" + key;
+        final var currentPath = path + "." + key;
         traverseJson(jsonObject.get(key), currentPath, paths);
       }
     } else if (jsonValue instanceof JSONArray jsonArray) {
