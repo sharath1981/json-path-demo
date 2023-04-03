@@ -35,7 +35,7 @@ public class ListAllTerminalAttributePaths1 {
         traverseJson(jsonArray.get(i), currentPath, paths);
       }
     } else {
-      paths.add(path + "=" + jsonValue);
+      paths.add(path + " : " + jsonValue);
     }
   }
 }
