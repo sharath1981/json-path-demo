@@ -25,7 +25,7 @@ public class ListAllTerminalAttributePaths3 {
   }
 
   private static void traverseJson(Object jsonValue, List<String> paths) {
-    Stack<Pair> stack = new Stack<>();
+    final var stack = new Stack<Pair>();
     stack.push(new Pair(jsonValue, "$"));
 
     while (!stack.empty()) {
